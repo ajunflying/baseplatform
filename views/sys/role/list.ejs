@@ -1,0 +1,108 @@
+<% include ../../head.ejs %>
+<% include template_info.ejs %>
+<% include setPermission.ejs %>
+<% include add.ejs %>
+<% include edit.ejs %>
+
+<script type="text/javascript">
+    var roleTable = new DoTable('roleTable');
+    $(function () {
+        roleTable.ajaxUrl = '/sys/role/list';
+        roleTable.theadTemplete = 'thead';
+        roleTable.tbodyTemplate = 'tbody';
+        roleTable.run();
+        roleTable.ajaxCallback = function (list) {
+            list.forEach(function (item) {
+                item.btn_open = 'none';
+                item.btn_close = 'none';
+                if (item.visible === 1) {
+                    item.btn_close = '';
+                    item.visible = '启用';
+                } else {
+                    item.btn_open = '';
+                    item.visible = '禁用';
+                }
+            });
+        };
+
+        /*添加菜单*/
+        roleTable.addEvent = function () {
+            addRole();
+        };
+
+    });
+
+    function openClose(id, flag, name) {
+        var str = '确定';
+        if (flag) {
+            str += '启用【';
+        } else {
+            str += '禁用【';
+        }
+        str += (name || '') + '】角色吗？';
+        tool.openTipPopupBtn(str, function () {
+            tool.post('/sys/role/openClose', {
+                id: id,
+                state: flag
+            }, function (result) {
+                roleTable.refresh();
+                createMessageTip('OK');
+            });
+        });
+    }
+
+</script>
+
+<div class="menu_map_link"></div>
+
+<div id="roleTable"></div>
+
+
+<script type="text/html" id="thead">
+    <th style="width:120px;">
+        角色名称
+    </th>
+    <th>
+        描述
+    </th>
+    <th style="width:70px;">
+        状态
+    </th>
+    <th style="width:120px;">
+        创建时间
+    </th>
+    <th style="width:180px;">
+        操作
+    </th>
+</script>
+<script type="text/html" id="tbody">
+    <tr>
+        <td>
+            <span title="名称">{name}</span>
+        </td>
+        <td>
+            <span title="描述">{desc}</span>
+        </td>
+        <td>
+            {visible}
+        </td>
+        <td>
+            <span title="创建时间">{createdAt}</span>
+        </td>
+        <td>
+            <a href="javascript:;" class="a_btn_blue" onclick="edit('{id}')">编辑</a>
+
+            <a href="javascript:;" class="a_btn_blue" onclick="setPermission('{id}', '{name}')">配置</a>
+
+            <a href="javascript:;" class="a_btn_green" onclick="openClose('{id}', true, '{name}')"
+               style="display:{btn_open}">启用</a>
+
+            <a href="javascript:;" class="a_btn_red" onclick="openClose('{id}', false, '{name}')"
+               style="display:{btn_close}">禁用</a>
+
+            <a href="javascript:;" class="a_btn_yellow" onclick="delRole('{id}', '{name}')">删除</a>
+        </td>
+    </tr>
+</script>
+
+<% include ../../footer.ejs %>

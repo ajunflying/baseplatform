@@ -1,0 +1,55 @@
+<script type="text/javascript">
+
+    function editMenu(id, pid) {
+        tool.post('/sys/menu/info', {id: id}, function (result) {
+            var popup = new Popup();
+            popup.title = '修改菜单';
+            popup.height = 420;
+            popup.isShowBtnOk = true;
+            popup.btnEvent = function () {
+                var submit = function () {
+                    var obj = {
+                        id: id,
+                        name: $('#menuName').val()
+                    };
+                    obj.parentId = parseInt($('#parentId').val() || 0);
+                    obj.host = $('#host').val();
+                    obj.url = $('#url').val();
+                    obj.order = parseInt($('#order').val() || 1);
+                    obj.icon = $('#iconSelect').val();
+                    obj.level = parseInt($('#level').val() || 1);
+
+                    tool.post('/sys/menu/edit', obj, function (result) {
+                        menuTable.refresh();
+                        popup.close();
+                        createMessageTip('修改成功');
+                    });
+                };
+                tool.jqueryValidate('formMenuInfo', submit, rules);
+            };
+
+            popup.run("templateMenuInfo", initData(result), function () {
+                tool.initSelect('iconSelect', tool.icon.select_option, result.icon);
+                $('#icon_span').addClass(result.icon);
+                tool.initSelect('parentId', menuList, pid);
+
+                $('#iconSelect').on('change', function () {
+                    $('#icon_span').removeClass();
+                    if ($(this).val()) {
+                        $('#icon_span').addClass($(this).val());
+                    }
+                });
+            });
+        });
+    }
+
+    function delMenu(id, name) {
+        tool.openTipPopupBtn('确定删除【' + (name || '') + '】吗？', function () {
+            tool.post('/sys/menu/delete', {id: id}, function (result) {
+                menuTable.refresh();
+                createMessageTip('删除成功');
+            });
+        }, '删除');
+    }
+
+</script>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <meta charset="utf-8"/>
+
+    <link href="/assets/global/plugins/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/plugins/simple-line-icons/simple-line-icons.min.css" rel="stylesheet" type="text/css"/>
+    <link href="/assets/global/css/components.css" rel="stylesheet" type="text/css"/>
+
+    <link href="/switch/dist/css/bootstrap3/bootstrap-switch.css" rel="stylesheet">
+
+    <link rel='stylesheet' href='/stylesheets/use_control.css' type="text/css"/>
+    <link rel='stylesheet' href='/stylesheets/style.css' type="text/css"/>
+
+    <script type="text/javascript" src="/javascripts/jquery.min.js"></script>
+    <script type="text/javascript" src="/javascripts/lodash.js"></script>
+
+    <script type="text/javascript" src="/javascripts/jquery.validate.js"></script>
+    <script type="text/javascript" src="/javascripts/messages_cn.js"></script>
+
+    <script type="text/javascript" src="/javascripts/tool.js"></script>
+
+    <script type="text/javascript" src="/javascripts/use_control.js"></script>
+
+    <script src="/switch/docs/js/bootstrap.min.js"></script>
+    <script src="/switch/dist/js/bootstrap-switch.js"></script>
+
+    <script type="text/javascript">
+        function loadPage() {
+            $("body").prepend('<div class="menu_map_link">' + $('#menu_map_link_hidden', window.parent.document).val() + '</div>');
+        }
+    </script>
+
+</head>
+<body onload="loadPage()">

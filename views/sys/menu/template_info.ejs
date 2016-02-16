@@ -1,0 +1,82 @@
+<script type="text/javascript">
+    var rules = {
+        menuName: {
+            required: true
+        }
+    };
+
+    function initData(obj) {
+        return {
+            menuName: obj.menuName || '',
+            level: obj.level || 0,
+            host: obj.host || '',
+            url: obj.url || '',
+            order: obj.order || 10
+        }
+    }
+
+</script>
+<script type="text/html" id="templateMenuInfo">
+    <form id="formMenuInfo">
+        <div class="form_css">
+            <div class="row">
+                <div class="row_left">上级菜单</div>
+                <div class="row_right">
+                    <select id="parentId" name="parentId" class="base_select"></select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_left">菜单名称</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" id="menuName" placeholder="菜单名称"
+                           name="menuName" value="{menuName}"/>
+
+                    <div class="v_error"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_left">等级</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" placeholder="菜单等级" id="level" name="level" value="{level}"
+                           onkeyup="value=value.replace(/[^\d]/g,'')"
+                           onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_left">host</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" id="host" placeholder="域名" name="host" value="{host}"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_left">URL</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" id="url" placeholder="/test" name="url" value="{url}"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_left">图标</div>
+                <div class="row_right">
+                    <select id="iconSelect" class="base_select" name="iconSelect"></select>
+                    <br/>
+                    <span id="icon_span"></span>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_left">排序</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" id="order" name="order" value="{order}"
+                           onkeyup="value=value.replace(/[^\d]/g,'')"
+                           onbeforepaste="clipboardData.setData('text',clipboardData.getData('text').replace(/[^\d]/g,''))"/>
+                </div>
+            </div>
+
+        </div>
+    </form>
+</script>

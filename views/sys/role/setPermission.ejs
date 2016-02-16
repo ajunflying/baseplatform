@@ -1,0 +1,86 @@
+<script type="text/javascript">
+
+    function setPermission(id, name) {
+        tool.post('/sys/role/initPermission', {
+            roleId: id
+        }, function (result) {
+            if (result) {
+                var popup = new Popup();
+                popup.title = '配置 ' + name + ' 权限';
+                popup.isShowBtnOk = true;
+                popup.width = 800;
+                popup.height = 450;
+                popup.btnEvent = function () {
+                    if (!confirm('确定重新保存 ' + name + ' 的权限吗')) {
+                        return;
+                    }
+                    var choose = {};
+                    $('input:checkbox[name=onoff]:checked').each(function () {
+                        var lang = this.lang.split('|');
+                        var id = lang[0], parentId = lang[1];
+                        if (!choose.hasOwnProperty(parentId)) {
+                            choose[parentId] = [];
+                        }
+                        choose[parentId].push(id);
+                    });
+
+                    tool.post('/sys/role/setPermission', {
+                        roleId: id,
+                        permission: choose
+                    }, function (reply) {
+                        if (reply) {
+                            popup.close();
+                            createMessageTip(reply);
+                        }
+                    });
+
+                };
+                var str = '';
+                result.all.forEach(function (item) {
+                    var _obj = {
+                        name: item.root.nameDesc,
+                        str: ''
+                    }
+                    item.child.forEach(function (c) {
+                        var _template_ = _.template($("#templateSetPermissionRowCheckBox").html());
+                        _obj.str += _template_({
+                            id: c.id,
+                            parentId: item.root.id,
+                            name: c.nameDesc,
+                            checked: result.choose.indexOf(c.id) > -1 ? 'checked="checked"' : ''
+                        });
+                    });
+                    var _template = _.template($("#templateSetPermissionRow").html());
+                    str += _template(_obj);
+                });
+                popup.run("templateSetPermission", {str: str});
+
+                $('input:checkbox[name=onoff]').bootstrapSwitch();
+            }
+        });
+    }
+</script>
+
+
+<script type="text/html" id="templateSetPermission">
+
+    <div class="form_css" id="permissionInfo">
+        {str}
+    </div>
+
+</script>
+
+<script type="text/html" id="templateSetPermissionRow">
+    <div class="row">
+        <div class="row_left" style="font-size:16px;font-weight: bold;">{name}</div>
+        <div class="row_right">
+            {str}
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="templateSetPermissionRowCheckBox">
+    <label style="margin-left: 10px;">
+        <input type="checkbox" name="onoff" data-size="mini" lang="{id}|{parentId}" {checked}/> {name}）
+    </label>
+</script>

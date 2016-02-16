@@ -1,0 +1,141 @@
+<% include ../../head.ejs %>
+<% include template_info.ejs %>
+<% include add.ejs %>
+<% include edit.ejs %>
+
+<script type="text/javascript">
+    var menuTable = new DoTable('menuTable');
+    var menuList = [];
+    $(function () {
+        menuTable.ajaxUrl = '/sys/menu/setting';
+        menuTable.theadTemplete = 'thead';
+        menuTable.tbodyTemplate = 'tbody';
+        menuTable.showSelectPageSize = false;
+        menuTable.showFooter = false;
+        menuTable.run();
+        menuTable.ajaxCallback = function (list) {
+            list.forEach(function (item) {
+                if (item.state === 1) {
+                    menuList.push({
+                        id: item.id,
+                        name: item._level + item.name
+                    });
+                    item.btnOpen = 'none';
+                    item.btnClose = '';
+                } else {
+                    item.btnOpen = '';
+                    item.btnClose = 'none';
+                }
+            });
+        };
+
+        /*添加菜单*/
+        menuTable.addEvent = function () {
+            addMenu();
+        };
+
+        menuTable.deleteEvent = function () {
+//            createMessageTip('ccccc');
+            createErrorTip('ccc')
+        }
+    });
+
+
+    function moveTo(id, type) {
+        tool.post('/sys/menu/setOrder', {
+            id: id,
+            type: type
+        }, function (result) {
+            menuTable.refresh();
+            createMessageTip('OK');
+        });
+    }
+
+    function openCloseMenu(id, state, name) {
+        tool.openTipPopupBtn('确定' + (state ? '开启' : '禁用') + '【' + (name || '') + '】菜单吗？', function () {
+            tool.post('/sys/menu/openClose', {
+                id: id,
+                state: state
+            }, function (result) {
+                menuTable.refresh();
+                createMessageTip('OK');
+            });
+        });
+    }
+
+</script>
+<div class="menu_map_link"></div>
+
+<div id="menuTable"></div>
+
+<script type="text/html" id="thead">
+    <th>
+        ID
+    </th>
+    <th>
+        菜单名称
+    </th>
+    <th>
+        上级节点ID
+    </th>
+    <th>
+        等级
+    </th>
+    <th>
+        地址
+    </th>
+    <th>
+        图标
+    </th>
+    <th>
+        排序
+    </th>
+    <th>
+        状态
+    </th>
+    <th>
+        调整顺序
+    </th>
+    <th>
+        操作
+    </th>
+</script>
+<script type="text/html" id="tbody">
+    <tr>
+        <td style="text-align: center;">{id}</td>
+        <td>
+            <span title="菜单名称">{_level}{name}</span>
+        </td>
+        <td>
+            <span title="上级节点ID">{parentId}</span>
+        </td>
+        <td>
+            <span title="等级">{level}</span>
+        </td>
+        <td>
+            <span title="地址">{host}{url}</span>
+        </td>
+        <td><span class="{icon}"></span></td>
+        <td>
+            <span title="排序">{order}</span>
+        </td>
+        <td>
+            <span title="状态">{stateText}</span>
+        </td>
+        <td style="text-align: center;">
+            <span class="fa fa-arrow-up" style="cursor: pointer;" onclick="moveTo({id}, 'up')"></span>
+            &nbsp;&nbsp;
+            <span class="fa fa-arrow-down" style="cursor: pointer;" onclick="moveTo({id}, 'down')"></span>
+        </td>
+        <td>
+            <a href="javascript:;" class="a_btn_blue" onclick="editMenu({id}, '{parentId}')">编辑</a>
+            <a href="javascript:;" class="a_btn_yellow" style="display:{btnOpen}"
+               onclick="openCloseMenu({id}, true, '{name_}')">启用</a>
+            <a href="javascript:;" class="a_btn_yellow" style="display:{btnClose}"
+               onclick="openCloseMenu({id}, false, '{name_}')">禁用</a>
+            <a href="javascript:;" class="a_btn_red" onclick="delMenu({id}, '{name_}')">删除</a>
+        </td>
+    </tr>
+</script>
+
+<% include ../../footer.ejs %>

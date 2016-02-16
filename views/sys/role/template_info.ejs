@@ -1,0 +1,45 @@
+<script type="text/javascript">
+    var rules = {
+        roleName: {
+            required: true
+        },
+        roleDesc: {
+            required: true
+        }
+    };
+
+    function initData(obj) {
+        return {
+            name: obj.name || '',
+            desc: obj.desc || ''
+        }
+    }
+
+</script>
+
+<script type="text/html" id="templateInfo">
+    <form id="formRoleInfo">
+        <div class="form_css">
+            <div class="row">
+                <div class="row_left">名称</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" id="roleName" placeholder="必须是唯一的，如：root用户"
+                           name="roleName" value="{name}"/>
+
+                    <div class="v_error"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_left">描述</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" id="roleDesc" placeholder="请表达清楚模块，如：最大权限"
+                           name="roleDesc" value="{desc}"/>
+
+                    <div class="v_error"></div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</script>

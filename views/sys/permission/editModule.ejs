@@ -1,0 +1,28 @@
+<script type="text/javascript">
+
+    function edit(id) {
+        tool.post('/sys/permission/infoModule', {id: id}, function (result) {
+            if (result) {
+                var popup = new Popup();
+                popup.title = '编辑';
+                popup.isShowBtnOk = true;
+                popup.btnEvent = function () {
+                    var submit = function () {
+                        var obj = {
+                            id: id,
+                            name: $('#moduleName').val()
+                        };
+                        tool.post('/sys/permission/editModule', obj, function (result) {
+                            permissionTable.refresh();
+                            createMessageTip('编辑成功');
+                            popup.close();
+                        });
+                    };
+                    tool.jqueryValidate('formInfo', submit, rules);
+                };
+                popup.run("templateInfo", initData(result));
+            }
+        });
+    }
+
+</script>

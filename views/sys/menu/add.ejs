@@ -1,0 +1,38 @@
+<script type="text/javascript">
+
+    function addMenu(){
+        var popup = new Popup();
+        popup.title = '新增菜单';
+        popup.height = 420;
+        popup.isShowBtnOk = true;
+        popup.btnEvent = function () {
+            var submit = function () {
+                var obj = {
+                    name: $('#menuName').val(),
+                    parentId: $('#parentId').val() || 0,
+                    url: $('#url').val(),
+                    order: $('#order').val(),
+                    icon: $('#iconSelect').val()
+                };
+                tool.post('/sys/menu/add', obj, function (result) {
+                    menuTable.refresh();
+                    popup.close();
+                    createMessageTip('添加成功');
+                });
+            };
+            tool.jqueryValidate('formMenuInfo', submit, rules);
+        };
+        popup.run("templateMenuInfo", initData({}), function () {
+            tool.initSelect('iconSelect', tool.icon.select_option);
+            $('#iconSelect').on('change', function () {
+                $('#icon_span').removeClass();
+                if ($(this).val()) {
+                    $('#icon_span').addClass($(this).val());
+                }
+            });
+        });
+
+        tool.initSelect('parentId', menuList);
+    }
+
+</script>

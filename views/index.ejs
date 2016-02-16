@@ -1,0 +1,88 @@
+<% include ./head.ejs %>
+
+<script type="text/javascript">
+    var coTable = new DoTable('cotable');
+    $(function () {
+        coTable.ajaxUrl = '/user/list';
+        coTable.theadTemplete = 'thead';
+        coTable.tbodyTemplate = 'tbody';
+        coTable.searchDivId = 'doTable_search';
+        coTable.run();
+
+        coTable.addEvent = function () {
+//                openPopup();
+//            createErrorTip('什么错啊');
+            createMessageTip('success')
+        };
+    });
+
+    function openPopup() {
+        var popup = new Popup('popup_complain');
+        popup.title = 'cccccccc';
+        popup.height = 300;
+        popup.isShowBtnOk = true;
+        popup.btnEvent = function () {
+            popup.close();
+        };
+        popup.html = "ccccccccccccc";
+        popup.run();
+    }
+</script>
+
+<div id="doTable_search">
+    <table>
+        <tr>
+            <td>
+                姓名：<input type="text" id="name" class="search"/>
+            </td>
+        </tr>
+    </table>
+</div>
+
+<div id="cotable"></div>
+
+<script type="text/html" id="thead">
+    <th>
+        编号
+    </th>
+    <th>
+        编号
+    </th>
+    <th>
+        编号
+    </th>
+    <th>
+        姓名
+    </th>
+    <th>
+        密码
+    </th>
+    <th>
+        操作
+    </th>
+</script>
+
+<script type="text/html" id="tbody">
+    <tr>
+        <td>
+            {id}
+        </td>
+        <td>
+            {id}
+        </td>
+        <td>
+            {id}
+        </td>
+        <td>
+            {name}
+        </td>
+        <td>
+            {pwd}
+        </td>
+        <td>
+            <a href="javascript:;" class="a_btn_red" onclick="openPopup()">popup</a>
+        </td>
+    </tr>
+</script>
+
+<% include ./footer.ejs %>

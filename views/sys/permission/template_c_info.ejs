@@ -1,0 +1,97 @@
+<script type="text/javascript">
+
+    function initDataC(obj) {
+        return {
+            id: obj.id || '',
+            pid: obj.pid || '',
+            childName: obj.childName || '',
+            nameDesc: obj.nameDesc || ''
+        }
+    }
+    function edit_row(self, id, pid, name) {
+        var _obj = {
+            id: id,
+            pid: pid
+        };
+        var c = $(self.parentNode.parentNode.parentNode).find('input');
+        c.each(function () {
+            if (this.name === 'childName') {
+                _obj.name = this.value;
+            }
+            if (this.name === 'nameDesc') {
+                _obj.desc = this.value;
+            }
+        });
+
+        if (id) {
+            if (confirm('确定保存【' + name + '】到【' + _obj.name + '】吗')) {
+                tool.post('/sys/permission/editChild', _obj, function (result) {
+                    createMessageTip('OK');
+
+                });
+            }
+        }
+    }
+    function del_row(self, id, name) {
+        if (id) {
+            if (confirm('确定删除【' + (name || '') + '】吗')) {
+                tool.post('/sys/permission/delChild', {
+                    id: id
+                }, function (result) {
+                    createMessageTip('OK');
+                    $(self.parentNode.parentNode.parentNode).remove();
+                });
+            }
+        }
+    }
+
+    function childList(id) {
+        $('#child_list').html('');
+        tool.post('/sys/permission/listChild', {id: id}, function (result) {
+            var str = '';
+            result.forEach(function (item) {
+                var _template = _.template($("#template_c_info_row").html());
+                str += _template(initDataC(item));
+            });
+            $('#child_list').html(str + $("#template_c_info_add").html())
+        });
+    }
+
+</script>
+<script type="text/html" id="template_c_Info">
+    <div class="form_css" id="child_list">
+
+    </div>
+</script>
+
+<script type="text/html" id="template_c_info_row">
+    <div class="row">
+        <div class="row_left">
+            <input type="text" class="base_text" placeholder="权限名称" name="childName"
+                   value="{childName}"/>
+        </div>
+        <div class="row_right">
+            <div class="r_r_middle" style="width:70%;">
+                <input type="text" class="base_text" placeholder="描述" name="nameDesc" value="{nameDesc}"/>
+            </div>
+            <div class="r_r_middle" style="width:30%;">
+                <a class="a_btn_blue" onclick="edit_row(this, '{id}', '{pid}', '{childName}')"
+                   href="javascript:;">保存</a>
+                <a class="a_btn_red" onclick="del_row(this, '{id}', '{childName}')" href="javascript:;">删除</a>
+            </div>
+        </div>
+    </div>
+</script>
+
+<script type="text/html" id="template_c_info_add">
+    <div class="row">
+        <div class="row_left">
+            <input type="text" class="base_text" placeholder="权限名称" name="childName" id="childName"/>
+        </div>
+        <div class="row_right">
+            <div class="r_r_middle" style="width:70%;">
+                <input type="text" class="base_text" placeholder="描述" name="nameDesc" id="nameDesc"/>
+            </div>
+        </div>
+    </div>
+</script>

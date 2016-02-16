@@ -1,0 +1,45 @@
+<script type="text/javascript">
+    var rules = {
+        moduleName: {
+            required: true
+        },
+        nameDesc: {
+            required: true
+        }
+    };
+
+    function initData(obj) {
+        return {
+            moduleName: obj.moduleName || '',
+            nameDesc: obj.nameDesc || ''
+        }
+    }
+
+</script>
+<script type="text/html" id="templateInfo">
+    <form id="formInfo">
+        <div class="form_css">
+            <div class="row">
+                <div class="row_left">模块名称</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" id="moduleName" placeholder="必须是唯一的，如：userServer"
+                           name="moduleName" value="{moduleName}"/>
+
+                    <div class="v_error"></div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="row_left">模块描述</div>
+                <div class="row_right">
+                    <input type="text" class="base_text" id="nameDesc" placeholder="请表达清楚模块用途"
+                           name="nameDesc" value="{nameDesc}"/>
+
+                    <div class="v_error"></div>
+
+                </div>
+            </div>
+        </div>
+    </form>
+</script>

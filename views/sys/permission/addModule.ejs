@@ -1,0 +1,26 @@
+<script type="text/javascript">
+
+    function addPermissionModule(){
+        var popup = new Popup();
+        popup.title = '新增';
+        popup.isShowBtnOk = true;
+        popup.btnEvent = function () {
+            var submit = function () {
+                var obj = {
+                    name: $('#moduleName').val()
+                };
+                tool.post('/sys/permission/addModule', obj, function (result) {
+                    permissionTable.refresh();
+                    createMessageTip('添加成功');
+                    popup.close();
+                });
+            };
+            tool.jqueryValidate('formInfo', submit, rules);
+        };
+        popup.run("templateInfo", initData({}), function () {
+
+        });
+
+    }
+
+</script>

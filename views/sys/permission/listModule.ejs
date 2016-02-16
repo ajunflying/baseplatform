@@ -1,0 +1,76 @@
+<% include ../../head.ejs %>
+<% include template_info.ejs %>
+<% include template_c_info.ejs %>
+<% include addModule.ejs %>
+<% include editModule.ejs %>
+
+<script type="text/javascript">
+    var permissionTable = new DoTable('permissionTable');
+    $(function () {
+        permissionTable.ajaxUrl = '/sys/permission/listModule';
+        permissionTable.theadTemplete = 'thead';
+        permissionTable.tbodyTemplate = 'tbody';
+        permissionTable.searchDivId = 'doTable_search';
+        permissionTable.run();
+
+        permissionTable.addEvent = function () {
+            addPermissionModule();
+        };
+    });
+
+    function addChild(id) {
+        var popup = new Popup();
+        popup.title = '添加模块权限';
+        popup.isShowBtnOk = true;
+        popup.btnEvent = function () {
+            var obj = {
+                id: id,
+                name: $('#childName').val(),
+                desc: $('#nameDesc').val()
+            };
+            tool.post('/sys/permission/addChild', obj, function (result) {
+//                permissionTable.refresh();
+                createMessageTip('添加成功');
+//                popup.close();
+                childList(id);
+            });
+        };
+        popup.run("template_c_Info", {}, function () {
+            childList(id);
+        });
+    }
+
+</script>
+
+<div id="permissionTable"></div>
+
+<script type="text/html" id="thead">
+    <th>
+        模块名称
+    </th>
+    <th>描述</th>
+    <th style="width:120px;">
+        创建时间
+    </th>
+    <th style="width:120px;">操作</th>
+</script>
+
+<script type="text/html" id="tbody">
+    <tr>
+        <td>
+            <span title="模块名称">{name}</span>
+        </td>
+        <td>
+            <span title="描述">{nameDesc}</span>
+        </td>
+        <td>
+            <span title="创建时间">{createdAt}</span>
+        </td>
+        <td>
+            <a href="javascript:;" class="a_btn_blue" onclick="edit('{id}')">编辑</a>
+            <a href="javascript:;" class="a_btn_yellow" onclick="addChild('{id}')">添加权限</a>
+        </td>
+    </tr>
+</script>
+
+<% include ../../footer.ejs %>

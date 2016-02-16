@@ -1,0 +1,38 @@
+<script type="text/javascript">
+
+    function edit(id) {
+        tool.post('/sys/role/info', {id: id}, function (result) {
+            if (result) {
+                var popup = new Popup();
+                popup.title = '编辑';
+                popup.isShowBtnOk = true;
+                popup.btnEvent = function () {
+                    var submit = function () {
+                        var obj = {
+                            id: id,
+                            name: $('#roleName').val(),
+                            desc: $('#roleDesc').val()
+                        };
+                        tool.post('/sys/role/edit', obj, function (result) {
+                            roleTable.refresh();
+                            popup.close();
+                            createMessageTip('编辑成功');
+                        });
+                    };
+                    tool.jqueryValidate('formRoleInfo', submit, rules);
+                };
+                popup.run("templateInfo", initData(result));
+            }
+        });
+    }
+
+    function delRole(id, name) {
+        tool.openTipPopupBtn('确定删除【' + (name || '') + '】吗？', function () {
+            tool.post('/sys/role/delete', {id: id}, function (result) {
+                roleTable.refresh();
+                createMessageTip('删除成功');
+            });
+        }, '删除');
+    }
+
+</script>
